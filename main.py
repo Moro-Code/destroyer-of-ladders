@@ -34,12 +34,12 @@ def info() -> typing.Dict:
 
 # start is called when your Battlesnake begins a game
 def start(game_state: typing.Dict):
-    print("GAME START")
+    pass
 
 
 # end is called when your Battlesnake finishes a game
 def end(game_state: typing.Dict):
-    print("GAME OVER\n")
+    pass
 
 
 # move is called on every turn and returns your next move
@@ -81,7 +81,7 @@ def move(game_state: typing.Dict) -> typing.Dict:
                 snake["head"],
                 food_points
             )
-            other_snakes["id"] = snake_obj
+            other_snakes[snake["id"]] = snake_obj
             hazard_points_set.merge(snake_obj.body)
             
     # add hazard points to pointset
@@ -105,6 +105,7 @@ def move(game_state: typing.Dict) -> typing.Dict:
     should_change_point = True
 
     # loop over the ordered list of food based on distance from our snakes head
+    # TODO: refine this as its too intensive for replit 
     while should_change_point and current_index < len(our_snake.ordered_foods):
         should_change_point = False
 
@@ -112,7 +113,7 @@ def move(game_state: typing.Dict) -> typing.Dict:
         # if our distance to that food point is further than the other snake we target 
         # the next closest food point and we do the same check
         # otherwise we target the closest food point
-        for snake in other_snakes:
+        for snake in other_snakes.values():
             if food_to_target["food"] == snake.ordered_foods[0]["food"] and food_to_target["distance_from_head"] >= snake.ordered_foods[0]["distance_from_head"]:
                   should_change_point = True
         
@@ -122,12 +123,15 @@ def move(game_state: typing.Dict) -> typing.Dict:
             
     move_determined = our_snake.determine_move(food_to_target["food"], possible_moves_for_our_snake)
     
+    # DEBUG logging 
     print("\nTURN")
     print(our_snake.ordered_foods)
     print("---------------------")
     print("our snakes head: {}".format(our_snake.head))
     print("our snakes tail: {}".format(our_snake.tail))
     print("our snakes body: {}".format(our_snake.body))
+    print("---------------------")
+    print("hazards: {}".format(hazard_points_set))
     print("---------------------")
     print("food targeted {}".format(food_to_target["food"]))
     print("---------------------")
@@ -136,6 +140,7 @@ def move(game_state: typing.Dict) -> typing.Dict:
     print("move determined: {}".format(move_determined.move_verb))
     print("move target point: {}".format(move_determined.target_point))
     print("END TURN\n")
+
     return {
         "move": move_determined.move_verb
     }

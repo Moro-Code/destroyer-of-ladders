@@ -6,7 +6,9 @@ from .move import Move
 
 class Snake:
 
-    def __init__(self, id:str, name:str , health: int, body: typing.List[typing.Dict[str, int]], head: typing.Dict[str, int], foods: typing.List[Point]):
+    def __init__(self, id:str, name:str , health: int, 
+                 body: typing.List[typing.Dict[str, int]], 
+                 head: typing.Dict[str, int], foods: typing.List[Point]):
         # assign object variables 
         self.id = id 
         self.name = name
@@ -56,30 +58,67 @@ class Snake:
             return False
         if self.body.contains(move.target_point):
             return False
-
-
         # cover edge case of when head is surrounded by body on three sides 
-        if move.move_verb == "up" and self.body.contains(self.head.translate_point(0, -1)) and self.body.contains(self.head.translate_point(1, 0)) and self.body.contains(self.head.translate_point(-1, 0)):
+        if (move.move_verb == "up" and self.body.contains(self.head.translate_point(0, -1))
+            and self.body.contains(self.head.translate_point(1, 0)) 
+            and self.body.contains(self.head.translate_point(-1, 0))
+        ):
             return True
-        elif move.move_verb == "down" and self.body.contains(self.head.translate_point(0, 1)) and self.body.contains(self.head.translate_point(1, 0)) and self.body.contains(self.head.translate_point(-1, 0)):
+        elif (
+            move.move_verb == "down" and self.body.contains(self.head.translate_point(0, 1))
+            and self.body.contains(self.head.translate_point(1, 0)) 
+            and self.body.contains(self.head.translate_point(-1, 0))
+        ):
             return True
-        elif move.move_verb == "right" and self.body.contains(self.head.translate_point(0, -1)) and self.body.contains(self.head.translate_point(0, 1)) and self.body.contains(self.head.translate_point(-1, 0)):
+        elif (
+            move.move_verb == "right" and self.body.contains(self.head.translate_point(0, -1))
+            and self.body.contains(self.head.translate_point(0, 1))
+            and self.body.contains(self.head.translate_point(-1, 0))
+        ):
             return True
-        elif move.move_verb == "left" and self.body.contains(self.head.translate_point(0, -1)) and self.body.contains(self.head.translate_point(0, 1)) and self.body.contains(self.head.translate_point(1, 0)):
+        elif (
+            move.move_verb == "left" and self.body.contains(self.head.translate_point(0, -1))
+            and self.body.contains(self.head.translate_point(0, 1))
+            and self.body.contains(self.head.translate_point(1, 0))
+        ):
             return True
 
         # cover edge case of when head is in a corner
-        if move.move_verb == "up" and self.head.translate_point(0, -1).is_outofbounds(10, 10) and (self.head.translate_point(1, 0).is_outofbounds(10, 10) or self.head.translate_point(-1, 0).is_outofbounds(10, 10)):
+        if (
+            move.move_verb == "up" and self.head.translate_point(0, -1).is_outofbounds(10, 10)
+            and (
+                self.head.translate_point(1, 0).is_outofbounds(10, 10)
+                or self.head.translate_point(-1, 0).is_outofbounds(10, 10)
+            )
+        ):
             return True
-        elif move.move_verb == "down" and self.head.translate_point(0, 1).is_outofbounds(10, 10) and (self.head.translate_point(1, 0).is_outofbounds(10, 10) or self.head.translate_point(-1, 0).is_outofbounds(10, 10)):
+        elif (
+            move.move_verb == "down" and self.head.translate_point(0, 1).is_outofbounds(10, 10) 
+            and (
+                self.head.translate_point(1, 0).is_outofbounds(10, 10)
+                or self.head.translate_point(-1, 0).is_outofbounds(10, 10)
+            )
+        ):
             return True
-        elif move.move_verb == "right" and self.head.translate_point(-1, 0).is_outofbounds(10, 10) and (self.head.translate_point(0, 1).is_outofbounds(10, 10) or self.head.translate_point(0, -1).is_outofbounds(10, 10)):
+        elif (
+            move.move_verb == "right" and self.head.translate_point(-1, 0).is_outofbounds(10, 10)
+            and (
+                self.head.translate_point(0, 1).is_outofbounds(10, 10)
+                or self.head.translate_point(0, -1).is_outofbounds(10, 10)
+            )
+        ):
             return True
-        elif move.move_verb == "left" and self.head.translate_point(1, 0).is_outofbounds(10, 10) and (self.head.translate_point(0, 1).is_outofbounds(10, 10) or self.head.translate_point(0, -1).is_outofbounds(10, 10)):
-            return True
-            
+        elif (
+            move.move_verb == "left" and self.head.translate_point(1, 0).is_outofbounds(10, 10)
+            and (
+                self.head.translate_point(0, 1).is_outofbounds(10, 10) 
+                or self.head.translate_point(0, -1).is_outofbounds(10, 10)
+            )
+        ):
+            return True   
         # check if move will lead us to a dead end
-        # TODO: change this to check if the move will result in the snake forming a circle as a result of the move
+        # TODO: change this to check if the move will result 
+        # in the snake forming a circle as a result of the move
         x_intercepts_for_move = self.body.get_x_intercepts_for_point(move.target_point)
 
         y_intercepts_for_move = self.body.get_y_intercepts_for_point(move.target_point)
@@ -94,7 +133,10 @@ class Snake:
     def determine_move(self, target_food_point: Point, list_of_possible_moves):
         closest_move = list_of_possible_moves[0]
         for move in list_of_possible_moves:
-            if move.target_point.distance(target_food_point) < closest_move.target_point.distance(target_food_point):
+            if (
+                move.target_point.distance(target_food_point) <
+                closest_move.target_point.distance(target_food_point)
+            ):
                 closest_move = move
 
         return closest_move
