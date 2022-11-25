@@ -108,6 +108,7 @@ def move(game_state: typing.Dict) -> typing.Dict:
     # TODO: refine this as its too intensive for replit 
     while should_change_point and current_index < len(our_snake.ordered_foods):
         should_change_point = False
+        food_to_target = our_snake.ordered_foods[current_index]
 
         # look at if our closest food point is the closest food point of other snakes 
         # if our distance to that food point is further than the other snake we target 
@@ -117,9 +118,9 @@ def move(game_state: typing.Dict) -> typing.Dict:
             if food_to_target["food"] == snake.ordered_foods[0]["food"] and food_to_target["distance_from_head"] >= snake.ordered_foods[0]["distance_from_head"]:
                   should_change_point = True
         
-        if should_change_point and current_index != len(our_snake.ordered_foods) - 1:
-            current_index+=1
-            food_to_target = our_snake.ordered_foods[current_index]
+        
+        current_index+=1
+        
             
     move_determined = our_snake.determine_move(food_to_target["food"], possible_moves_for_our_snake)
     
